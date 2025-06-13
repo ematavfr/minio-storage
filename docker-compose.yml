@@ -14,6 +14,8 @@ services:
       - MINIO_ROOT_PASSWORD=minioadmin123
       - MINIO_CONSOLE_ADDRESS=:9001
       - MINIO_ADDRESS=:9000
+      - MINIO_BROWSER_REDIRECT_URL=http://sites/minio
+      - MINIO_CONSOLE_SUBPATH=/minio
     volumes:
       - ./data:/data
       - ./config:/root/.minio
@@ -23,13 +25,11 @@ services:
     command: server /data --console-address ":9001"
     labels:
       - "traefik.enable=true"
-      # MinIO Console (Web UI)
+      # MinIO Console (Web UI) - serve without stripprefix
       - "traefik.http.routers.minio-console.rule=Host(`sites`) && PathPrefix(`/minio`)"
       - "traefik.http.routers.minio-console.entrypoints=web"
       - "traefik.http.routers.minio-console.service=minio-console"
       - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
-      - "traefik.http.middlewares.minio-console-stripprefix.stripprefix.prefixes=/minio"
-      - "traefik.http.routers.minio-console.middlewares=minio-console-stripprefix"
       # MinIO API endpoint
       - "traefik.http.routers.minio-api.rule=Host(`sites`) && PathPrefix(`/minio-api`)"
       - "traefik.http.routers.minio-api.entrypoints=web"
