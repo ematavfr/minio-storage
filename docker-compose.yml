@@ -23,18 +23,20 @@ services:
     command: server /data --console-address ":9001"
     labels:
       - "traefik.enable=true"
-      # MinIO API endpoint
-      - "traefik.http.routers.minio-api.rule=Host(`sites`) && PathPrefix(`/minio-api`)"
-      - "traefik.http.routers.minio-api.entrypoints=web"
-      - "traefik.http.services.minio-api.loadbalancer.server.port=9000"
-      - "traefik.http.middlewares.minio-api-stripprefix.stripprefix.prefixes=/minio-api"
-      - "traefik.http.routers.minio-api.middlewares=minio-api-stripprefix"
       # MinIO Console (Web UI)
       - "traefik.http.routers.minio-console.rule=Host(`sites`) && PathPrefix(`/minio`)"
       - "traefik.http.routers.minio-console.entrypoints=web"
+      - "traefik.http.routers.minio-console.service=minio-console"
       - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
-      - "traefik.http.middlewares.minio-stripprefix.stripprefix.prefixes=/minio"
-      - "traefik.http.routers.minio-console.middlewares=minio-stripprefix"
+      - "traefik.http.middlewares.minio-console-stripprefix.stripprefix.prefixes=/minio"
+      - "traefik.http.routers.minio-console.middlewares=minio-console-stripprefix"
+      # MinIO API endpoint
+      - "traefik.http.routers.minio-api.rule=Host(`sites`) && PathPrefix(`/minio-api`)"
+      - "traefik.http.routers.minio-api.entrypoints=web"
+      - "traefik.http.routers.minio-api.service=minio-api"
+      - "traefik.http.services.minio-api.loadbalancer.server.port=9000"
+      - "traefik.http.middlewares.minio-api-stripprefix.stripprefix.prefixes=/minio-api"
+      - "traefik.http.routers.minio-api.middlewares=minio-api-stripprefix"
 
   # MinIO Client (mc) for bucket management
   minio-client:
