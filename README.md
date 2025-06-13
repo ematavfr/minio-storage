@@ -12,10 +12,13 @@ S3-compatible object storage for your machine learning datasets, models, and art
    ```
 
 2. **Access MinIO**:
-   - **Web Console**: http://sites/minio
+   - **Web Console (Traefik)**: http://sites/minio
+   - **Web Console (Direct)**: http://localhost:9001
    - **API Endpoint**: http://sites/minio-api
    - **Username**: `minioadmin`
    - **Password**: `minioadmin123`
+   
+   **Note**: If http://sites/minio shows a blank page, use the direct access method at http://localhost:9001
 
 ## 📁 Pre-configured Buckets
 
